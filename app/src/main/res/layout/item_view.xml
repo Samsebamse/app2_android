@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/item_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="29dp"
+        android:hint="studentid"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        android:hint="studentname"
+        android:layout_alignBaseline="@+id/item_id"
+        android:layout_alignBottom="@+id/item_id"
+        android:layout_toEndOf="@+id/item_id" />
+
+    <TextView
+        android:id="@+id/item_surname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/item_name"
+        android:layout_alignBottom="@+id/item_name"
+        android:layout_marginStart="27dp"
+        android:layout_toEndOf="@+id/item_name"
+        android:hint="studentsurname" />
+
+    <TextView
+        android:id="@+id/item_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/item_name"
+        android:layout_below="@+id/item_name"
+        android:layout_marginTop="14dp"
+        android:hint="studentnumber" />
+
+</RelativeLayout>
