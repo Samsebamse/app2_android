@@ -1,12 +1,16 @@
 package com.example.sami.s305047;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Contact> allContacts;
     ListView list;
+    ArrayAdapter<Contact> adapter;
     DBHelper db;
 
     @Override
@@ -24,12 +29,59 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         db = new DBHelper(this);
+        //db.onCreate(db.getWritableDatabase());
+
         //populateContactList();
         populateListView();
+        longClickListViewHandler();
+        deleteTable(R.id.delete_all);
+
+    }
+
+
+    private void deleteTable(int buttonId) {
+        Button deleteAllButton = (Button) findViewById(buttonId);
+        deleteAllButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                db.dropTable("student_table");
+            }
+        });
+
+    }
+
+
+    public void dialogBoxHandler(final Contact clickedContact) {
+        //Put up the Yes/No message box
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+                .setTitle("Erase this entity")
+                .setMessage("Are you sure?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        db.deleteContact(clickedContact.getID());
+                        adapter.remove(clickedContact);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+
+
+    }
+
+    public void longClickListViewHandler() {
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                Contact clickedContact = allContacts.get(position);
+                dialogBoxHandler(clickedContact);
+                return false;
+            }
+        });
+
     }
 
     public void populateContactList() {
-        /*
+
         Contact contact1 = new Contact("Sami", "Rashiti", "12345678");
         db.addContact(contact1);
         Contact contact2 = new Contact("Abu", "Iqbal", "12345678");
@@ -40,18 +92,18 @@ public class MainActivity extends AppCompatActivity {
         db.addContact(contact4);
         Contact contact5 = new Contact("Mustafe", "Farah", "12345678");
         db.addContact(contact5);
-        */
+
 
     }
 
     public void populateListView() {
         allContacts = db.findAllContacts();
-        ArrayAdapter<Contact> adapter = new MyListAdapter();
+        adapter = new MyListAdapter();
         list = (ListView) findViewById(R.id.studentListView);
         list.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
     }
-
 
     private class MyListAdapter extends ArrayAdapter<Contact> {
         public MyListAdapter() {
@@ -83,6 +135,11 @@ public class MainActivity extends AppCompatActivity {
             return itemView;
 
         }
+
+
+
     }
+
+
 
 }

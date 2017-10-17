@@ -19,16 +19,20 @@
             android:layout_height="wrap_content"
             android:hint="Search for a student" />
 
-        <Space
-            android:layout_width="40sp"
-            android:layout_height="40sp"
-            android:layout_weight="1" />
+        <Button
+            android:id="@+id/search_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:textSize="10sp" />
 
         <Button
-            android:id="@+id/button"
-            android:layout_width="80sp"
-            android:layout_height="40sp"
-            android:text="Search" />
+            android:id="@+id/delete_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="DEL ALL"
+            android:textSize="10sp" />
 
     </LinearLayout>
 

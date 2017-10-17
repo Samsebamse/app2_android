@@ -3,6 +3,7 @@ package com.example.sami.s305047;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -46,8 +47,18 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_NAME);
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE " + TABLE_NAME);
+    }
+
+    public boolean tableExists(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        long count = DatabaseUtils.queryNumEntries(db, TABLE_NAME);
+        if(count <= 0){
+            return false;
+        }
+        else
+            return true;
     }
 
     public void addContact(Contact contact){
@@ -107,4 +118,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return count;
     }
+
+    public void dropTable(String table){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE " + table);
+    }
+
 }
