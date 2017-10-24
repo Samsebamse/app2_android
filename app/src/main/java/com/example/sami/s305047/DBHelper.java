@@ -3,7 +3,6 @@ package com.example.sami.s305047;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -32,36 +31,27 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COL_4 = "PHONE";
 
 
-
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
-                            + COL_1 + " INTEGER PRIMARY KEY, "
-                            + COL_2 + " TEXT, " + COL_3
-                            + " TEXT, " + COL_4 + " INTEGER)";
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
+                + COL_1 + " INTEGER PRIMARY KEY, "
+                + COL_2 + " TEXT, " + COL_3
+                + " TEXT, " + COL_4 + " INTEGER)";
         db.execSQL(CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
     }
 
-    public boolean tableExists(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        long count = DatabaseUtils.queryNumEntries(db, TABLE_NAME);
-        if(count <= 0){
-            return false;
-        }
-        else
-            return true;
-    }
 
-    public void addContact(Contact contact){
+    public void addContact(Contact contact) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_2, contact.getName());
@@ -119,9 +109,17 @@ public class DBHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    public void dropTable(String table){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE " + table);
-    }
+    public Contact findContact(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        Cursor cursor = db.query(TABLE_NAME, new String[]{COL_1,
+                        COL_2, COL_3, COL_4}, COL_1 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Contact contact = new Contact(Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1), cursor.getString(2), cursor.getString(3));
+        return contact;
+    }
 }

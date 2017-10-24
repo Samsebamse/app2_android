@@ -1,16 +1,18 @@
 package com.example.sami.s305047;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,9 +21,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private List<Contact> allContacts;
-    ListView list;
-    ArrayAdapter<Contact> adapter;
-    DBHelper db;
+    private ListView list;
+    private ArrayAdapter<Contact> adapter;
+    private DBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,35 +31,53 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         db = new DBHelper(this);
-        //db.onCreate(db.getWritableDatabase());
-
-        //populateContactList();
+        db.onCreate(db.getWritableDatabase());
         populateListView();
         longClickListViewHandler();
-        deleteTable(R.id.delete_all);
+        clickListViewHandler();
+
 
     }
 
-
-    private void deleteTable(int buttonId) {
-        Button deleteAllButton = (Button) findViewById(buttonId);
-        deleteAllButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                db.dropTable("student_table");
-            }
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateListView();
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                Intent settingsActivity = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(settingsActivity);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
-    public void dialogBoxHandler(final Contact clickedContact) {
-        //Put up the Yes/No message box
+    }
+
+    public void onFabClicked(View v){
+        Intent addStudentActivity = new Intent(getApplicationContext(), NewStudentActivity.class);
+        startActivityForResult(addStudentActivity, 0);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void dialogBoxHandler(final Contact clickedContact){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder
                 .setTitle("Erase this entity")
                 .setMessage("Are you sure?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        db.getWritableDatabase();
                         db.deleteContact(clickedContact.getID());
                         adapter.remove(clickedContact);
                     }
@@ -71,27 +91,28 @@ public class MainActivity extends AppCompatActivity {
     public void longClickListViewHandler() {
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 Contact clickedContact = allContacts.get(position);
                 dialogBoxHandler(clickedContact);
-                return false;
+                return true;
             }
         });
 
     }
 
-    public void populateContactList() {
+    public void clickListViewHandler(){
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-        Contact contact1 = new Contact("Sami", "Rashiti", "12345678");
-        db.addContact(contact1);
-        Contact contact2 = new Contact("Abu", "Iqbal", "12345678");
-        db.addContact(contact2);
-        Contact contact3 = new Contact("Ibra", "Diallo", "12345678");
-        db.addContact(contact3);
-        Contact contact4 = new Contact("Vignesh", "Viggy", "12345678");
-        db.addContact(contact4);
-        Contact contact5 = new Contact("Mustafe", "Farah", "12345678");
-        db.addContact(contact5);
+                long studId =  allContacts.get(position).getID();
+                Intent editStudentActivity = new Intent(getApplicationContext(), EditStudentActivity.class);
+                editStudentActivity.putExtra("studentID", studId);
+                startActivity(editStudentActivity);
+
+            }
+        });
+
 
 
     }
@@ -100,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
         allContacts = db.findAllContacts();
         adapter = new MyListAdapter();
         list = (ListView) findViewById(R.id.studentListView);
+        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        list.setItemsCanFocus(false);
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -139,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
 
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.sami.s305047.MainActivity">
+
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="100"
+        android:title="Button title"
+        android:icon="@mipmap/settings_icon"
+        app:showAsAction="ifRoom">
+
+    </item>
+
+</menu>
