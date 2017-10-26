@@ -1,15 +1,11 @@
 package com.example.sami.s305047;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import static java.nio.file.Paths.get;
 
 public class EditStudentActivity extends AppCompatActivity {
 
