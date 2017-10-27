@@ -7,21 +7,30 @@ package com.example.sami.s305047;
 public class Message {
 
     private long ID;
-    String message;
+    private String messageData;
+    private String messageSaved;
+    private String messageSent;
 
 
     public Message(){
         //empty constructor
     }
 
-    public Message(String message){
-        this.message = message;
+
+    public Message(String messageData, String messageSaved, String messageSent){
+        this.messageData = messageData;
+        this.messageSaved = messageSaved;
+        this.messageSent = messageSent;
     }
 
-    public Message(long ID, String message){
+
+    public Message(long ID, String messageData, String messageSaved, String messageSent){
         this.ID = ID;
-        this.message = message;
+        this.messageData = messageData;
+        this.messageSaved = messageSaved;
+        this.messageSent = messageSent;
     }
+
 
     public long getID() {
         return ID;
@@ -31,11 +40,27 @@ public class Message {
         this.ID = ID;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMessageData() {
+        return messageData;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessageData(String messageData) {
+        this.messageData = messageData;
+    }
+
+    public String getMessageSaved() {
+        return messageSaved;
+    }
+
+    public void setMessageSaved(String messageSaved) {
+        this.messageSaved = messageSaved;
+    }
+
+    public String getMessageSent() {
+        return messageSent;
+    }
+
+    public void setMessageSent(String messageSent) {
+        this.messageSent = messageSent;
     }
 }

@@ -6,7 +6,7 @@
     <item
         android:id="@+id/icon_save2"
         android:orderInCategory="100"
-        android:title="Button title"
+        android:title="save2"
         android:icon="@mipmap/save_icon"
         app:showAsAction="ifRoom">
 

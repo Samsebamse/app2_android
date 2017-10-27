@@ -40,10 +40,23 @@
             android:layout_weight="0.47"
             android:checked="false"
             android:text="Turn on" />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/sms_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.15"
+        android:hint="Your sms will be displayed here" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/sms_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 </LinearLayout>

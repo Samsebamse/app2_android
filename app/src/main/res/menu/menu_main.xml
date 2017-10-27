@@ -5,12 +5,20 @@
     tools:context="com.example.sami.s305047.MainActivity">
 
     <item
-        android:id="@+id/settings"
+        android:id="@+id/send_message"
+        android:title="message"
         android:orderInCategory="100"
-        android:title="Button title"
-        android:icon="@mipmap/settings_icon"
+        android:icon="@mipmap/icon_message"
         app:showAsAction="ifRoom">
 
+    </item>
+
+    <item
+        android:id="@+id/settings"
+        android:title="settings"
+        android:orderInCategory="100"
+        android:icon="@mipmap/settings_icon"
+        app:showAsAction="ifRoom">
     </item>
 
 </menu>
