@@ -9,9 +9,9 @@ import android.widget.Toast;
  * Created by Sami on 24-Oct-17.
  */
 
-public class MyService extends Service {
+public class MyServiceWeekly extends Service {
 
-    public MyService(){
+    public MyServiceWeekly(){
 
     }
 

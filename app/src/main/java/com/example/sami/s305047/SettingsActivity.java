@@ -9,9 +9,12 @@ import java.util.Date;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +39,8 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText SMSInput;
     private TextView SMSPreview;
 
+    private SharedPreferences prefs;
+
     private int year, month, day, hour, minute;
 
 
@@ -43,6 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        prefs = getSharedPreferences("StudentSettings", MODE_PRIVATE);
 
         checkBoxHandler(R.id.checkBox);
         calendarHandler();
@@ -55,7 +62,8 @@ public class SettingsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.icon_save2:
-
+                saveSettings();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -72,27 +80,41 @@ public class SettingsActivity extends AppCompatActivity {
         SMSInput = (EditText) findViewById(R.id.sms_input);
         SMSPreview = (TextView) findViewById(R.id.sms_preview);
 
-        String typedSMS = SMSInput.getText().toString();
+        String smsSavedText = prefs.getString("message", "");
 
-        if(!SMSInput.isInputMethodTarget()){
+        SMSInput.setText(smsSavedText);
+        SMSPreview.setText(smsSavedText);
 
-        }
+        if(!setPreference.isChecked())
+            SMSInput.setEnabled(false);
 
+        SMSInput.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+                SMSPreview.setText(SMSInput.getText().toString());
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
     }
 
     private void checkBoxHandler(int rId) {
 
+        boolean savedValue = prefs.getBoolean("weekly_msg", false);
 
         setPreference = (CheckBox) findViewById(rId);
+        setPreference.setChecked(savedValue);
+
         setPreference.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(setPreference.isChecked()){
-                    setAlarm();
+                    SMSInput.setEnabled(true);
                     Intent intent = new Intent(SettingsActivity.this, MyService.class);
                     startService(intent);
                     Toast.makeText(getApplicationContext(), "SERVICE IS ON", Toast.LENGTH_SHORT).show();
-
 
                     //SmsManager smsManager = SmsManager.getDefault();
                     //smsManager.sendTextMessage("12341234", null, smsData, null, null);
@@ -101,6 +123,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 }
                 else{
+                    SMSInput.setEnabled(false);
                     Toast.makeText(getApplicationContext(), "SERVICE IS OFF", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -109,13 +132,12 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setAlarm(){
-        Intent intent = new Intent(this, MyBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, intent, 0);
+        Intent intent = new Intent(this, MyBroadcastReceiverWeekly.class);
+        intent.putExtra("Message", SMSInput.getText().toString());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-                + (3 * 1000), pendingIntent);
-        Toast.makeText(this, "Alarm set in " + 3 + " seconds",
-                Toast.LENGTH_SHORT).show();
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),3 * 1000, pendingIntent);
     }
 
     private void timeHandler() {
@@ -127,7 +149,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if(!setPreference.isChecked()) {
+                if(setPreference.isChecked()) {
                     // TODO Auto-generated method stub
                     Calendar calendar = myCalendar;
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -177,7 +199,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                if(!setPreference.isChecked()) {
+                if(setPreference.isChecked()) {
                     // TODO Auto-generated method stub
                     DatePickerDialog datePicker = new DatePickerDialog(SettingsActivity.this, date, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
@@ -190,6 +212,18 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    private void saveSettings(){
+        System.out.println("HELELRKALSKDLSADK");
+        SharedPreferences.Editor editor = getSharedPreferences("StudentSettings", MODE_PRIVATE).edit();
+        editor.putBoolean("weekly_msg", setPreference.isChecked());
+        editor.putLong("date", myCalendar.getTimeInMillis());
+        editor.putString("message", SMSPreview.getText().toString());
+        editor.apply();
 
+        if(setPreference.isChecked())
+            setAlarm();
+
+        Toast.makeText(getApplicationContext(), "Settings Saved!", Toast.LENGTH_SHORT).show();
+    }
 
 }

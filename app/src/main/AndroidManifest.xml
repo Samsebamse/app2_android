@@ -36,10 +36,16 @@
             android:parentActivityName=".MainActivity" />
 
         <service android:name="MyService"></service>
+        <service android:name="MyServiceWeekly"></service>
 
         <receiver android:name=".MyBroadcastReceiver">
             <intent-filter>
                 <action android:name="com.example.sami.s305047.MyBroadcastReceiver" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".MyBroadcastReceiverWeekly">
+            <intent-filter>
+                <action android:name="com.example.sami.s305047.MyBroadcastReceiverWeekly" />
             </intent-filter>
         </receiver>
     </application>
