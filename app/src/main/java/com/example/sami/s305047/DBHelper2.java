@@ -69,8 +69,8 @@ public class DBHelper2 extends SQLiteOpenHelper{
                 Message message = new Message();
                 message.setID(cursor.getLong(0));
                 message.setMessageData(cursor.getString(1));
-                message.setMessageSaved(cursor.getString(2));
-                message.setMessageSent(cursor.getString(3));
+                message.setMessageSaved(cursor.getLong(2));
+                message.setMessageSent(cursor.getLong(3));
                 messageList.add(message);
             } while (cursor.moveToNext());
             cursor.close();
@@ -106,7 +106,7 @@ public class DBHelper2 extends SQLiteOpenHelper{
             cursor.moveToFirst();
 
         Message message = new Message(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2), cursor.getString(3));
+                cursor.getString(1), cursor.getLong(2), cursor.getLong(3));
         return message;
     }
 

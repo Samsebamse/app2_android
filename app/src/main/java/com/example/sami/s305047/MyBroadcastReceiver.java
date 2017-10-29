@@ -16,8 +16,11 @@ import java.util.Date;
 public class MyBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "SERVICE IS ON FIREEEEEEEEEEEEEEEEEEE", Toast.LENGTH_SHORT).show();
+        Intent mainActivity = new Intent(context, MainActivity.class);
+        context.startActivity(mainActivity);
+
         Intent i = new Intent(context, MyService.class);
+        i.putExtra("Message", intent.getStringExtra("Message"));
         context.startService(i);
     }
 }

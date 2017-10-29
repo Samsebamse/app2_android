@@ -22,7 +22,10 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(getApplicationContext(), "My Service is ON FIRE!!!!!!", Toast.LENGTH_SHORT).show();
+        String msg = intent.getStringExtra("Message");
+        System.out.println(msg);
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+        WakeLocker.release();
         return super.onStartCommand(intent, flags, startId);
     }
 }

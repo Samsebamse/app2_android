@@ -4,35 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="15dp"
-    android:layout_marginRight="15dp"
     android:layout_marginTop="15dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     android:orientation="vertical"
-    tools:context="com.example.sami.s305047.SettingsActivity">
+    tools:context="com.example.sami.s305047.NewMessageActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100sp"
-            android:layout_marginRight="100sp"
-            android:layout_weight="0.47"
-            android:checked="false"
-            android:text="Weekly Messages" />
-
-    </LinearLayout>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Date &amp; Time" />
+        android:paddingLeft="10dp"
+        android:text="DATE &amp; TIME" />
 
     <EditText
         android:id="@+id/calendar"
@@ -40,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="100sp"
         android:layout_marginRight="100sp"
+        android:focusable="false"
         android:ems="10"
         android:inputType="date" />
 
@@ -49,34 +34,27 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="100sp"
         android:layout_marginRight="100sp"
+        android:focusable="false"
         android:ems="10"
         android:inputType="time" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="15dp" />
+        android:layout_height="30dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Message" />
-
-    <TextView
-        android:id="@+id/sms_preview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.15"
-        android:hint="Your sms will be displayed here" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:text="MESSAGE"
+        android:paddingLeft="10dp"/>
 
     <EditText
         android:id="@+id/sms_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Type in message"/>
+        android:hint="Type in message"
+        android:inputType="textMultiLine"
+        android:paddingLeft="20dp" />
 
 </LinearLayout>

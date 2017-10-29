@@ -53,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent settingsActivity = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(settingsActivity);
                 return true;
+            case R.id.new_message:
+                Intent newMessageActivity = new Intent(getApplicationContext(), NewMessageActivity.class);
+                startActivity(newMessageActivity);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
